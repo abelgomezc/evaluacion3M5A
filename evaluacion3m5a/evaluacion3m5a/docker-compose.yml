@@ -1,0 +1,41 @@
+version: "3"
+services:
+  api-spring:
+    image: abelgomezcondo/api-spring-new:latest
+    networks:
+      - net-cloud
+    container_name: api-spring-newmongo
+    depends_on:
+      - mongodb_container-newmongo
+    environment:
+    - SPRING_DATA_MONGODB_URI=mongodb://mongodb_container-newmongo:21299/nueva_bd  
+    - SPRING_DATA_MONGODB_DATABASE=nueva_bd  
+    - SPRING_DATA_MONGODB_USERNAME=mongodbuser
+    - SPRING_DATA_MONGODB_PASSWORD=secret
+    - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    - SPRING_JPA_SHOW_SQL=true
+    - SPRING_DATASOURCE.CACHEPREPSTMTS=false
+    ports:
+      - 8082:8080
+
+  mongodb_container-newmongo:
+    image: mongo:latest
+    networks:
+      - net-cloud
+    container_name: mongodb_container-newmongo
+    ports:
+      - 21299:27017 
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    volumes:
+      - mongodb_data_newmongo:/data/db
+
+networks:
+  net-cloud:
+
+volumes:
+  mongodb_data:
+  mongodb_data_newmongo:
+
+    
